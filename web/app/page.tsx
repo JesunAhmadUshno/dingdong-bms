@@ -285,23 +285,23 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-cyan-500/20 rounded-3xl blur-2xl opacity-40" style={{ animationDelay: "1s" }}></div>
 
             {/* Card Container */}
-            <div className="relative w-full bg-gradient-to-br from-slate-800/60 via-slate-800/40 to-slate-900/60 border border-slate-700/50 rounded-3xl p-8 sm:p-12 backdrop-blur-xl shadow-2xl overflow-hidden">
+            <div className="relative w-full bg-gradient-to-br from-slate-800/60 via-slate-800/40 to-slate-900/60 border border-slate-700/50 rounded-3xl p-10 sm:p-16 backdrop-blur-xl shadow-2xl overflow-hidden">
               {/* Decorative corner accent */}
               <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-cyan-500/25 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
               <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-tr from-blue-500/15 to-transparent rounded-full blur-3xl"></div>
 
               {/* Card Content */}
-              <div className="relative space-y-8">
+              <div className="relative space-y-10">
                 {/* Header */}
-                <div className="space-y-2">
+                <div className="space-y-3 pb-4">
                   <h2 className="text-4xl font-bold text-white">Welcome</h2>
-                  <p className="text-gray-400 text-base">Sign in to access your building management dashboard</p>
+                  <p className="text-gray-400 text-base leading-relaxed">Sign in to access your building management dashboard</p>
                 </div>
 
                 {/* Login Form */}
-                <form onSubmit={handleLogin} className="space-y-6">
+                <form onSubmit={handleLogin} className="space-y-7">
                   {/* Username Field */}
-                  <div className="space-y-2.5">
+                  <div className="space-y-3">
                     <label className="block text-sm font-semibold text-gray-300">Username</label>
                     <div className="relative group">
                       <input
@@ -309,16 +309,16 @@ export default function Home() {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         placeholder="your_username"
-                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700/60 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/70 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 backdrop-blur-sm"
+                        className="w-full px-6 py-4.5 bg-slate-900/50 border border-slate-700/60 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/70 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 backdrop-blur-sm text-base"
                       />
-                      <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                     </div>
                   </div>
 
                   {/* Password Field */}
-                  <div className="space-y-2.5">
+                  <div className="space-y-3">
                     <label className="block text-sm font-semibold text-gray-300">Password</label>
                     <div className="relative group">
                       <input
@@ -326,9 +326,9 @@ export default function Home() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700/60 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/70 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 backdrop-blur-sm"
+                        className="w-full px-6 py-4.5 bg-slate-900/50 border border-slate-700/60 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/70 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 backdrop-blur-sm text-base"
                       />
-                      <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
                     </div>
@@ -350,7 +350,7 @@ export default function Home() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 bg-gradient-to-r from-cyan-500 via-cyan-500 to-blue-600 hover:from-cyan-600 hover:via-cyan-600 hover:to-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/40 shadow-lg shadow-cyan-500/20"
+                    className="w-full py-4.5 bg-gradient-to-r from-cyan-500 via-cyan-500 to-blue-600 hover:from-cyan-600 hover:via-cyan-600 hover:to-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-base rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/40 shadow-lg shadow-cyan-500/20 mt-2"
                   >
                     {loading ? (
                       <div className="flex items-center justify-center gap-3">
@@ -364,17 +364,17 @@ export default function Home() {
                 </form>
 
                 {/* Divider */}
-                <div className="relative py-2">
+                <div className="relative py-4">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-slate-700/50"></div>
                   </div>
                   <div className="relative flex justify-center text-xs">
-                    <span className="px-3 bg-gradient-to-br from-slate-800/60 via-slate-800/40 to-slate-900/60 text-slate-500 font-medium">Quick Access</span>
+                    <span className="px-4 bg-gradient-to-br from-slate-800/60 via-slate-800/40 to-slate-900/60 text-slate-500 font-medium">Quick Access</span>
                   </div>
                 </div>
 
                 {/* Demo Accounts */}
-                <div className="space-y-2 max-h-52 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+                <div className="space-y-2.5 max-h-56 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
                   <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest px-2">Demo Credentials</p>
                   {[
                     { name: "🏠 Building Manager", user: "admin_manager", pass: "asade123" },
@@ -389,14 +389,10 @@ export default function Home() {
                         setUsername(account.user);
                         setPassword(account.pass);
                       }}
-                      className="w-full p-3.5 rounded-xl bg-slate-900/40 border border-slate-700/40 hover:border-cyan-500/50 hover:bg-slate-900/60 transition-all duration-300 text-left group backdrop-blur-sm"
+                      className="w-full p-4 rounded-2xl bg-slate-900/40 border border-slate-700/40 hover:border-cyan-500/50 hover:bg-slate-900/60 transition-all duration-300 text-left group backdrop-blur-sm"
                     >
-                      <p className="text-sm font-semibold text-slate-300 group-hover:text-cyan-300 transition-colors flex items-center gap-2">
-                        {account.name}
-                      </p>
-                      <p className="text-xs text-slate-600 group-hover:text-slate-500 font-mono mt-1">
-                        {account.user} / {account.pass}
-                      </p>
+                      <p className="text-sm font-semibold text-slate-300 group-hover:text-cyan-300 transition-colors">{account.name}</p>
+                      <p className="text-xs text-slate-600 group-hover:text-slate-500 font-mono mt-1.5">{account.user} / {account.pass}</p>
                     </button>
                   ))}
                 </div>
