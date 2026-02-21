@@ -138,7 +138,7 @@ Divider.displayName = 'Divider';
 
 /* Dropdown */
 export interface DropdownItem {
-  label: string;
+  label?: string;
   onClick?: () => void;
   divider?: boolean;
   variant?: 'default' | 'danger';

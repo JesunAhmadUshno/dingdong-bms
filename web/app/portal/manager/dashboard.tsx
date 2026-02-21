@@ -5,6 +5,28 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { PROPERTIES, OCCUPANTS } from "@/lib/database";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+  Badge,
+  Progress,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableHeaderCell,
+  TableDataCell,
+  Alert,
+  Breadcrumbs,
+  Avatar,
+  LoadingSpinner,
+  Divider,
+  Dropdown,
+} from "@/lib/components";
 
 interface DashboardMetrics {
   totalProperties: number;
@@ -219,240 +241,295 @@ export default function ManagerDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
-      {/* Header */}
-      <nav className={`bg-gradient-to-r ${colorClasses[roleConfig.color]} text-white px-6 py-4 flex justify-between items-center shadow-lg`}>
-        <div>
-          <h1 className="text-2xl font-bold">{roleConfig.icon} {roleConfig.title}</h1>
-          <p className="text-sm opacity-90">{roleConfig.subtitle}</p>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="text-xs bg-white/20 px-3 py-1 rounded-full font-semibold">
-            {user.full_name}
-          </span>
-          <Link
-            href="/portal/profile"
-            className="text-white hover:bg-white/20 px-3 py-1 rounded text-sm font-semibold"
-          >
-            Profile
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="text-white hover:bg-white/20 px-3 py-1 rounded text-sm"
-          >
-            Logout
-          </button>
-        </div>
-      </nav>
-
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <aside className="w-64 bg-white dark:bg-gray-800 border-r hidden md:block overflow-y-auto shadow-sm">
-          <div className="p-6">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
-              Role Features
-            </p>
-            <ul className="space-y-2">
-              {roleConfig.features.map((feature, idx) => (
-                <li
-                  key={idx}
-                  className={`p-2 rounded cursor-pointer transition ${
-                    idx === 0
-                      ? "font-medium bg-blue-50 text-blue-600 dark:bg-blue-900/20"
-                      : "hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
-                  }`}
-                >
-                  {feature}
-                </li>
-              ))}
-            </ul>
-
-            {user.properties && user.properties.length > 0 && (
-              <>
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 mt-8">
-                  Assigned Properties
-                </p>
-                <ul className="space-y-2 text-sm">
-                  {PROPERTIES.filter((p) => user.properties!.includes(p.property_id)).map(
-                    (prop) => (
-                      <li
-                        key={prop.property_id}
-                        className="p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded cursor-pointer text-gray-700 dark:text-gray-300"
-                      >
-                        {prop.address}
-                      </li>
-                    )
-                  )}
-                </ul>
-              </>
-            )}
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 p-8 overflow-y-auto">
-          {/* Metrics Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {roleConfig.displayMetrics.map((metricKey) => {
-              const value = metrics[metricKey];
-              const label = METRIC_LABELS[metricKey];
-              const icon = METRIC_ICONS[metricKey];
-              const borderColor = METRIC_COLORS[metricKey];
-
-              return (
-                <div
-                  key={metricKey}
-                  className={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow border-l-4 ${borderColor} hover:shadow-lg transition`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
-                      <p className="text-3xl font-bold text-gray-800 dark:text-white mt-2">
-                        {typeof value === "number" && metricKey === "occupancyRate"
-                          ? `${value}%`
-                          : typeof value === "number" && metricKey === "monthlyRevenue"
-                          ? `$${value.toLocaleString()}`
-                          : value}
-                      </p>
-                    </div>
-                    <span className="text-4xl opacity-20">{icon}</span>
-                  </div>
-                </div>
-              );
-            })}
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 flex flex-col">
+      {/* Header with role-specific styling */}
+      <header
+        className={`bg-gradient-to-r ${colorClasses[roleConfig.color]} text-white px-6 py-4 shadow-lg border-b-4 border-opacity-20`}
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center text-2xl">
+              {roleConfig.icon}
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">{roleConfig.title}</h1>
+              <p className="text-sm text-white text-opacity-90">{roleConfig.subtitle}</p>
+            </div>
           </div>
 
-          {/* Main Sections */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Pending Approvals */}
-            <div className="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-              <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-white">
-                📋 Pending Approvals
-              </h3>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-gray-100 dark:bg-gray-700 border-b">
-                    <tr>
-                      <th className="p-3 font-semibold">Request</th>
-                      <th className="p-3 font-semibold">From</th>
-                      <th className="p-3 font-semibold">Status</th>
-                      <th className="p-3 font-semibold">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y dark:divide-gray-700">
-                    {[
-                      {
-                        request: "Guest Pass Override",
-                        from: "John Wick (Unit 1A)",
-                        status: "Urgent",
-                      },
-                      {
-                        request: "New Lease: Unit 402",
-                        from: "Alice Chen",
-                        status: "Pending",
-                      },
-                      {
-                        request: "Maintenance Approval",
-                        from: "Elevator Service",
-                        status: "Pending",
-                      },
-                    ].map((item, idx) => (
-                      <tr
-                        key={idx}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-700 transition"
-                      >
-                        <td className="p-3">{item.request}</td>
-                        <td className="p-3 text-gray-600 dark:text-gray-300">{item.from}</td>
-                        <td className="p-3">
-                          <span
-                            className={`px-2 py-1 rounded text-xs font-semibold ${
-                              item.status === "Urgent"
-                                ? "bg-red-100 text-red-800 dark:bg-red-900/30"
-                                : "bg-blue-100 text-blue-800 dark:bg-blue-900/30"
-                            }`}
-                          >
-                            {item.status}
-                          </span>
-                        </td>
-                        <td className="p-3">
-                          <button className="text-blue-600 dark:text-blue-400 hover:underline font-semibold">
-                            Review
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+          {/* User Profile Section */}
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-3 bg-white bg-opacity-10 px-4 py-2 rounded-lg">
+              <Avatar initials={user.full_name.substring(0, 2).toUpperCase()} size="sm" />
+              <div className="text-sm">
+                <p className="font-semibold">{user.full_name}</p>
+                <p className="text-xs text-white text-opacity-80">{user.role.role_name.replace(/_/g, " ")}</p>
               </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-              <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-white">
-                ⚡ Quick Actions
-              </h3>
-              <div className="space-y-3">
-                {[
-                  { icon: "📝", label: "Create Work Order", href: "#" },
-                  { icon: "👤", label: "Manage Tenants", href: "#" },
-                  { icon: "🔐", label: "Security Controls", href: "#" },
-                  { icon: "📊", label: "View Reports", href: "#" },
-                  { icon: "💬", label: "Send Message", href: "#" },
-                  { icon: "⚙️", label: "Settings", href: "/portal/profile" },
-                ].map((action, idx) => (
-                  <Link key={idx} href={action.href}>
-                    <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer transition border border-gray-200 dark:border-gray-600">
-                      <p className="font-semibold text-gray-700 dark:text-gray-200">
-                        {action.icon} {action.label}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
+            <Dropdown
+              trigger={
+                <button className="hover:bg-white hover:bg-opacity-20 p-2 rounded-lg transition">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v .01M12 6a1 1 0 110-2 1 1 0 010 2m0 7a1 1 0 110-2 1 1 0 010 2m0 7a1 1 0 110-2 1 1 0 010 2" />
+                  </svg>
+                </button>
+              }
+              items={[
+                { label: "Profile", onClick: () => router.push("/portal/profile") },
+                { label: "Settings", onClick: () => router.push("/portal/profile") },
+                { divider: true },
+                { label: "Sign Out", onClick: handleLogout, variant: "danger" },
+              ]}
+              align="right"
+            />
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <div className="flex-1 overflow-auto">
+        <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+          {/* Breadcrumbs */}
+          <Breadcrumbs
+            items={[
+              { label: "Dashboard", href: "/portal/manager" },
+              { label: roleConfig.title.split(" ")[0] },
+            ]}
+          />
+
+          {/* Quick Alert for Active Alerts */}
+          {metrics.alertCount > 0 && (
+            <Alert variant="warning" title="Active Alerts" onClose={() => {}}>
+              You have {metrics.alertCount} active alert{metrics.alertCount > 1 ? "s" : ""} requiring attention.
+              <div className="mt-2 flex gap-2">
+                <Button variant="outline" size="sm">Review Alerts</Button>
               </div>
+            </Alert>
+          )}
+
+          {/* Key Metrics Section */}
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Key Metrics</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {roleConfig.displayMetrics.map((metricKey) => {
+                const value = metrics[metricKey];
+                const label = METRIC_LABELS[metricKey];
+                const icon = METRIC_ICONS[metricKey];
+
+                const progressValue = metricKey === "occupancyRate" || metricKey === "complianceScore" ? value : null;
+
+                return (
+                  <Card key={metricKey} variant="elevated">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                          {label}
+                        </p>
+                        <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+                          {typeof value === "number" && metricKey === "monthlyRevenue"
+                            ? `$${value.toLocaleString()}`
+                            : metricKey === "occupancyRate" || metricKey === "complianceScore"
+                            ? `${value}%`
+                            : value}
+                        </p>
+                      </div>
+                      <span className="text-4xl opacity-30">{icon}</span>
+                    </div>
+
+                    {progressValue !== null && (
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <Progress value={progressValue} max={100} variant="primary" />
+                      </div>
+                    )}
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Pending Approvals */}
+            <div className="lg:col-span-2">
+              <Card variant="elevated">
+                <CardHeader>
+                  <CardTitle>📋 Pending Approvals</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <Table variant="striped">
+                      <TableHead>
+                        <TableRow>
+                          <TableHeaderCell>Request</TableHeaderCell>
+                          <TableHeaderCell>From</TableHeaderCell>
+                          <TableHeaderCell>Status</TableHeaderCell>
+                          <TableHeaderCell className="text-right">Action</TableHeaderCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {[
+                          {
+                            request: "Guest Pass Override",
+                            from: "John Wick (Unit 1A)",
+                            status: "Urgent",
+                          },
+                          {
+                            request: "New Lease: Unit 402",
+                            from: "Alice Chen",
+                            status: "Pending",
+                          },
+                          {
+                            request: "Maintenance Approval",
+                            from: "Elevator Service",
+                            status: "Pending",
+                          },
+                        ].map((item, idx) => (
+                          <TableRow key={idx}>
+                            <TableDataCell className="font-medium">{item.request}</TableDataCell>
+                            <TableDataCell className="text-gray-600 dark:text-gray-400">
+                              {item.from}
+                            </TableDataCell>
+                            <TableDataCell>
+                              <Badge
+                                label={item.status}
+                                variant={item.status === "Urgent" ? "error" : "warning"}
+                                size="sm"
+                              />
+                            </TableDataCell>
+                            <TableDataCell className="text-right">
+                              <Button variant="ghost" size="sm">
+                                Review
+                              </Button>
+                            </TableDataCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Quick Actions */}
+            <div>
+              <Card variant="elevated">
+                <CardHeader>
+                  <CardTitle>⚡ Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {[
+                    { icon: "📝", label: "Create Work Order", href: "#" },
+                    { icon: "👤", label: "Manage Tenants", href: "#" },
+                    { icon: "🔐", label: "Security Controls", href: "#" },
+                    { icon: "📊", label: "View Reports", href: "#" },
+                    { icon: "💬", label: "Send Message", href: "#" },
+                    { icon: "⚙️", label: "Settings", href: "/portal/profile" },
+                  ].map((action, idx) => (
+                    <Link key={idx} href={action.href}>
+                      <button className="w-full p-3 rounded-lg bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-600 dark:hover:to-gray-700 transition-all flex items-center gap-3 border border-gray-200 dark:border-gray-600 group">
+                        <span className="text-lg group-hover:scale-110 transition-transform">
+                          {action.icon}
+                        </span>
+                        <span className="font-medium text-gray-700 dark:text-gray-200 text-left flex-1">
+                          {action.label}
+                        </span>
+                        <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </Link>
+                  ))}
+                </CardContent>
+              </Card>
             </div>
           </div>
 
           {/* Recent Activity */}
-          <div className="mt-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-            <h3 className="text-lg font-bold mb-4 text-gray-800 dark:text-white">
-              📅 Recent Activity
-            </h3>
-            <div className="space-y-3">
-              {[
-                { time: "2 hours ago", event: "Maintenance request submitted for HVAC", type: "info" },
-                { time: "5 hours ago", event: "New tenant onboarding completed", type: "success" },
-                { time: "1 day ago", event: "Security audit completed", type: "success" },
-                {
-                  time: "2 days ago",
-                  event: "Compliance score updated to 92%",
-                  type: "info",
-                },
-              ].map((activity, idx) => (
-                <div
-                  key={idx}
-                  className="flex gap-4 items-start p-3 rounded-lg bg-gray-50 dark:bg-gray-700"
-                >
-                  <span
-                    className={`text-xs font-bold px-2 py-1 rounded ${
-                      activity.type === "success"
-                        ? "bg-green-100 text-green-800 dark:bg-green-900/30"
-                        : "bg-blue-100 text-blue-800 dark:bg-blue-900/30"
-                    }`}
-                  >
-                    {activity.type.toUpperCase()}
-                  </span>
-                  <div>
-                    <p className="text-sm text-gray-700 dark:text-gray-200">{activity.event}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      {activity.time}
-                    </p>
+          <Card variant="elevated">
+            <CardHeader>
+              <CardTitle>📅 Recent Activity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {[
+                  { time: "2 hours ago", event: "Maintenance request submitted for HVAC", type: "info" },
+                  { time: "5 hours ago", event: "New tenant onboarding completed", type: "success" },
+                  { time: "1 day ago", event: "Security audit completed", type: "success" },
+                  { time: "2 days ago", event: "Compliance score updated to 92%", type: "info" },
+                ].map((activity, idx) => (
+                  <div key={idx} className="flex gap-4 items-start pb-4 last:pb-0 last:border-0 border-b border-gray-200 dark:border-gray-700">
+                    <Badge
+                      label={activity.type.toUpperCase()}
+                      variant={activity.type === "success" ? "success" : "info"}
+                      size="sm"
+                    />
+                    <div className="flex-1">
+                      <p className="text-gray-900 dark:text-gray-100">{activity.event}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {activity.time}
+                      </p>
+                    </div>
                   </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Properties View */}
+          {user.properties && user.properties.length > 0 && (
+            <Card variant="elevated">
+              <CardHeader>
+                <CardTitle>🏢 Assigned Properties ({user.properties.length})</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {PROPERTIES.filter((p) => user.properties!.includes(p.property_id)).map(
+                    (prop) => (
+                      <Link key={prop.property_id} href={`/portal/manager/properties/${prop.property_id}`}>
+                        <div className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-primary-500 hover:shadow-md transition-all group">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">
+                                Property #{prop.property_id}
+                              </h4>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                                {prop.address}
+                              </p>
+                            </div>
+                            <svg className="w-5 h-5 text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-all group-hover:translate-x-1">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                          <Badge
+                            label={`${prop.total_units} Units`}
+                            variant="primary"
+                            size="sm"
+                          />
+                        </div>
+                      </Link>
+                    )
+                  )}
                 </div>
-              ))}
-            </div>
-          </div>
+              </CardContent>
+            </Card>
+          )}
         </main>
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-8 px-6 mt-8">
+        <div className="max-w-7xl mx-auto text-center text-sm text-gray-600 dark:text-gray-400">
+          <p>© 2024 DingDong Building Management System. All rights reserved.</p>
+          <div className="mt-4 flex gap-4 justify-center text-xs">
+            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-400 transition">Privacy Policy</a>
+            <span className="text-gray-300 dark:text-gray-700">•</span>
+            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-400 transition">Terms of Service</a>
+            <span className="text-gray-300 dark:text-gray-700">•</span>
+            <a href="#" className="hover:text-primary-600 dark:hover:text-primary-400 transition">Support</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
