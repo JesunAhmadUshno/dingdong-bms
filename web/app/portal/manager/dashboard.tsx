@@ -59,7 +59,7 @@ export default function ManagerDashboard() {
       {/* Welcome Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Overview Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-4">Overview Dashboard</h1>
           <p className="text-sm sm:text-base text-slate-400">Here's what's happening with your properties today.</p>
         </div>
         <button className="w-full sm:w-auto px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-medium text-white transition-all duration-300 backdrop-blur-md flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
@@ -74,15 +74,15 @@ export default function ManagerDashboard() {
         {/* Card 1: Properties */}
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
-            <div className="flex items-center gap-4 mb-4">
+          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-10 sm:p-12 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300 overflow-hidden">
+            <div className="flex items-center gap-4 mb-6">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30 text-blue-400 shadow-[inset_0_0_12px_rgba(59,130,246,0.2)] shrink-0">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
               </div>
               <p className="text-sm sm:text-base text-slate-400 font-medium">Total Properties</p>
             </div>
             <div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-2">{metrics.totalProperties}</h3>
+              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">{metrics.totalProperties}</h3>
               <div className="flex items-center">
                 <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/20">+12%</span>
               </div>
@@ -93,15 +93,15 @@ export default function ManagerDashboard() {
         {/* Card 2: Tenants */}
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-purple-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
-            <div className="flex items-center gap-4 mb-4">
+          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-10 sm:p-12 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300 overflow-hidden">
+            <div className="flex items-center gap-4 mb-6">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/20 flex items-center justify-center border border-purple-500/30 text-purple-400 shadow-[inset_0_0_12px_rgba(168,85,247,0.2)] shrink-0">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
               </div>
               <p className="text-sm sm:text-base text-slate-400 font-medium">Active Tenants</p>
             </div>
             <div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-2">{metrics.totalTenants}</h3>
+              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">{metrics.totalTenants}</h3>
               <div className="flex items-center">
                 <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/20">+5.4%</span>
               </div>
@@ -112,15 +112,15 @@ export default function ManagerDashboard() {
         {/* Card 3: Occupancy */}
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-600 to-cyan-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
-            <div className="flex items-center gap-4 mb-4">
+          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-10 sm:p-12 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300 overflow-hidden">
+            <div className="flex items-center gap-4 mb-6">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center border border-cyan-500/30 text-cyan-400 shadow-[inset_0_0_12px_rgba(6,182,212,0.2)] shrink-0">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
               </div>
               <p className="text-sm sm:text-base text-slate-400 font-medium">Occupancy Rate</p>
             </div>
             <div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-2">{metrics.occupancyRate}%</h3>
+              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">{metrics.occupancyRate}%</h3>
               <div className="flex items-center justify-between gap-4">
                 <span className="px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 text-xs font-bold border border-rose-500/20 shrink-0">-1.2%</span>
                 {/* Mini Progress Bar */}
@@ -135,15 +135,15 @@ export default function ManagerDashboard() {
         {/* Card 4: Revenue */}
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-emerald-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
-            <div className="flex items-center gap-4 mb-4">
+          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-10 sm:p-12 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300 overflow-hidden">
+            <div className="flex items-center gap-4 mb-6">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 text-emerald-400 shadow-[inset_0_0_12px_rgba(16,185,129,0.2)] shrink-0">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               </div>
               <p className="text-sm sm:text-base text-slate-400 font-medium">Monthly Revenue</p>
             </div>
             <div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-2">${(metrics.revenue / 1000).toFixed(1)}k</h3>
+              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">${(metrics.revenue / 1000).toFixed(1)}k</h3>
               <div className="flex items-center">
                 <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/20">+8.1%</span>
               </div>
@@ -339,6 +339,9 @@ export default function ManagerDashboard() {
     </div>
   );
 }
+
+
+
 
 
 
