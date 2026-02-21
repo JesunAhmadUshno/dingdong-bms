@@ -27,7 +27,7 @@ export default function OwnerDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <nav className="bg-white dark:bg-gray-800 shadow px-6 py-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-green-700">DingDong | Owner Portal</h1>
+        <h1 className="text-xl font-bold text-green-700">TriMatrixLab | Owner Portal</h1>
         <div className="flex items-center gap-4">
           <span className="text-sm">Welcome, <strong>{user.full_name}</strong></span>
           <Link href="/portal/profile" className="text-blue-600 hover:underline text-sm font-semibold">

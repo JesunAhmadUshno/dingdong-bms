@@ -160,7 +160,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-[0_0_15px_rgba(59,130,246,0.5)]">
               D
             </div>
-            <h2 className="font-bold text-white text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">DingDong</h2>
+            <h2 className="font-bold text-white text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">TriMatrixLab</h2>
           </div>
           {/* Close button for mobile */}
           <button 
