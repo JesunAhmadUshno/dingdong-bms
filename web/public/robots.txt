@@ -1,0 +1,31 @@
+User-agent: *
+Allow: /
+Allow: /portal/renter
+Allow: /portal/leaseholder
+Allow: /portal/owner
+Allow: /portal/manager
+Allow: /sustainability
+
+# Disallow private/admin API routes
+Disallow: /api/admin
+Disallow: *.json$
+Disallow: /private
+
+# Allow search engines
+Allow: /api/auth/session
+
+# Sitemap location
+Sitemap: https://dingdong-bms.com/sitemap.xml
+
+# Crawl delay in seconds (optional)
+Crawl-delay: 2
+
+# Request rate limiting
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
