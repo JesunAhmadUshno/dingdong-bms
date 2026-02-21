@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
@@ -73,8 +73,8 @@ export default function ManagerDashboard() {
         
         {/* Card 1: Properties */}
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
             <div className="flex justify-between items-start mb-4">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30 text-blue-400 shadow-[inset_0_0_12px_rgba(59,130,246,0.2)]">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
@@ -90,8 +90,8 @@ export default function ManagerDashboard() {
 
         {/* Card 2: Tenants */}
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-purple-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-purple-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
             <div className="flex justify-between items-start mb-4">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/20 flex items-center justify-center border border-purple-500/30 text-purple-400 shadow-[inset_0_0_12px_rgba(168,85,247,0.2)]">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
@@ -107,8 +107,8 @@ export default function ManagerDashboard() {
 
         {/* Card 3: Occupancy */}
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-600 to-cyan-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-600 to-cyan-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
             <div className="flex justify-between items-start mb-4">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center border border-cyan-500/30 text-cyan-400 shadow-[inset_0_0_12px_rgba(6,182,212,0.2)]">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
@@ -128,8 +128,8 @@ export default function ManagerDashboard() {
 
         {/* Card 4: Revenue */}
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-emerald-400 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 to-emerald-400 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+          <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-transform duration-300">
             <div className="flex justify-between items-start mb-4">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 text-emerald-400 shadow-[inset_0_0_12px_rgba(16,185,129,0.2)]">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -331,4 +331,6 @@ export default function ManagerDashboard() {
     </div>
   );
 }
+
+
 
