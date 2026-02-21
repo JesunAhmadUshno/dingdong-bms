@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 // SEO Metadata with OpenGraph and Twitter Cards
 export const metadata: Metadata = {
   title: {
-    default: "TriMatrixLab BMS - Intelligent Building Management System",
-    template: "%s | TriMatrixLab BMS",
+    default: "DingDong BMS - Intelligent Building Management System",
+    template: "%s | DingDong BMS",
   },
   description:
-    "TriMatrixLab BMS is a comprehensive building management system designed for property managers, social housing operators, corporate owners, and administrators. Manage properties, tenants, maintenance, subsidies, and compliance with ease.",
+    "DingDong BMS is a comprehensive building management system designed for property managers, social housing operators, corporate owners, and administrators. Manage properties, tenants, maintenance, subsidies, and compliance with ease.",
   keywords: [
     "building management",
     "property management",
@@ -34,25 +34,25 @@ export const metadata: Metadata = {
     "facility management",
   ],
   category: "Business",
-  authors: [{ name: "TriMatrixLab Team", url: "https://trimatrixlab-bms.com" }],
-  creator: "TriMatrixLab Team",
-  publisher: "TriMatrixLab",
+  authors: [{ name: "TriMatrixLab", url: "https://dingdong-bms.com" }],
+  creator: "TriMatrixLab",
+  publisher: "DingDong",
   
   // OpenGraph for social media sharing
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://trimatrixlab-bms.com",
-    siteName: "TriMatrixLab BMS",
-    title: "TriMatrixLab BMS - Intelligent Building Management System",
+    url: "https://dingdong-bms.com",
+    siteName: "DingDong BMS",
+    title: "DingDong BMS - Intelligent Building Management System",
     description:
-      "Streamline property management and tenant operations with TriMatrixLab's comprehensive building management platform.",
+      "Streamline property management and tenant operations with DingDong's comprehensive building management platform.",
     images: [
       {
-        url: "https://trimatrixlab-bms.com/og-image.png",
+        url: "https://dingdong-bms.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "TriMatrixLab BMS - Building Management System",
+        alt: "DingDong BMS - Building Management System",
         type: "image/png",
       },
     ],

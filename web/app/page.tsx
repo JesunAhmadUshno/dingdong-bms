@@ -76,11 +76,11 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-xl flex items-center justify-center font-bold text-white">
-                TM
+                DB
               </div>
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                  TriMatrixLab
+                  DingDong
                 </h1>
                 <p className="text-xs text-gray-400">Building Management</p>
               </div>
@@ -209,11 +209,11 @@ export default function Home() {
             {/* Logo & Badge */}
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-2xl flex items-center justify-center font-bold text-2xl text-white shadow-lg shadow-cyan-500/20">
-                TM
+                DB
               </div>
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                  TriMatrixLab
+                  DingDong
                 </h1>
                 <p className="text-sm text-gray-400 font-medium">Smart Building Management</p>
               </div>
@@ -243,13 +243,13 @@ export default function Home() {
               </div>
 
               <p className="text-lg text-gray-300 max-w-lg leading-relaxed">
-                Streamline operations, enhance communication, and maximize efficiency with TriMatrixLab's intelligent platform for modern building management.
+                Streamline operations, enhance communication, and maximize efficiency with DingDong's intelligent platform for modern building management.
               </p>
             </div>
 
             {/* Features List */}
             <div className="space-y-4 pt-4">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Why Choose TriMatrixLab</p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Why Choose DingDong</p>
               <div className="space-y-3">
                 {[
                   { icon: "⚡", text: "Real-time occupancy tracking & analytics" },
@@ -404,7 +404,7 @@ export default function Home() {
 
       {/* Footer */}
       <div className="absolute bottom-0 left-0 right-0 py-8 text-center border-t border-slate-700/30 bg-gradient-to-t from-slate-950/80 to-transparent">
-        <p className="text-sm text-slate-500 font-medium">© 2024 TriMatrixLab Building Management System. All rights reserved.</p>
+        <p className="text-sm text-slate-500 font-medium">© 2024 DingDong Building Management System. Crafted by TriMatrixLab. All rights reserved.</p>
       </div>
     </div>
   );
