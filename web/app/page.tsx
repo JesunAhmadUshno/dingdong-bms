@@ -193,154 +193,195 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center p-4">
-      {/* Animated gradient background elements */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4 overflow-hidden">
+      {/* Animated gradient background - Multiple for depth */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 animate-pulse"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 animate-pulse" style={{ animationDelay: "1s" }}></div>
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 w-full max-w-6xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="relative z-10 w-full max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Column: Branding & Info */}
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 w-fit">
+          <div className="space-y-12 lg:pr-8">
+            {/* Logo & Badge */}
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-2xl flex items-center justify-center font-bold text-2xl text-white shadow-lg shadow-cyan-500/20">
+                DB
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  DingDong
+                </h1>
+                <p className="text-sm text-gray-400 font-medium">Smart Building Management</p>
+              </div>
+            </div>
+
+            {/* Main Heading */}
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-3 px-4 py-2.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 w-fit backdrop-blur-sm">
                 <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-cyan-400">AI-Powered Management</span>
+                <span className="text-sm font-semibold text-cyan-300">AI-Powered Intelligence</span>
               </div>
 
-              <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                <span className="bg-gradient-to-r from-white via-cyan-200 to-blue-400 bg-clip-text text-transparent">
-                  Smart Building
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  Management
-                </span>
-              </h1>
+              <div className="space-y-3">
+                <h2 className="text-6xl lg:text-7xl font-bold leading-tight">
+                  <span className="bg-gradient-to-r from-white via-cyan-100 to-blue-300 bg-clip-text text-transparent">
+                    Smart
+                  </span>
+                  <br />
+                  <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    Building
+                  </span>
+                  <br />
+                  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                    Solutions
+                  </span>
+                </h2>
+              </div>
 
-              <p className="text-lg text-gray-400 max-w-md">
-                Streamline operations, enhance communication, and maximize efficiency with DingDong's intelligent building management platform.
+              <p className="text-lg text-gray-300 max-w-lg leading-relaxed">
+                Streamline operations, enhance communication, and maximize efficiency with DingDong's intelligent platform for modern building management.
               </p>
             </div>
 
             {/* Features List */}
-            <div className="space-y-3">
-              {[
-                { icon: "✓", text: "Real-time occupancy tracking" },
-                { icon: "✓", text: "Automated maintenance requests" },
-                { icon: "✓", text: "Community engagement tools" },
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <span className="text-cyan-400 font-bold text-lg">{item.icon}</span>
-                  <span className="text-gray-300">{item.text}</span>
-                </div>
-              ))}
+            <div className="space-y-4 pt-4">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Why Choose DingDong</p>
+              <div className="space-y-3">
+                {[
+                  { icon: "⚡", text: "Real-time occupancy tracking & analytics" },
+                  { icon: "🔧", text: "Automated maintenance & work order management" },
+                  { icon: "👥", text: "Seamless tenant & community engagement" },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-4 group">
+                    <span className="text-2xl mt-1 group-hover:scale-110 transition-transform">{item.icon}</span>
+                    <span className="text-gray-300 font-medium pt-1">{item.text}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* CTA Buttons */}
             <div className="flex gap-4 pt-4">
-              <button className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/20">
-                Explore Now
+              <button className="px-8 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/30 inline-flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Get Started Now
               </button>
-              <button className="px-8 py-3 border border-gray-700 hover:border-cyan-500/50 text-gray-300 hover:text-cyan-400 font-semibold rounded-lg transition-all">
+              <button className="px-8 py-3.5 border-2 border-cyan-500/40 hover:border-cyan-500/70 text-cyan-300 hover:text-cyan-200 font-semibold rounded-xl transition-all duration-300 backdrop-blur-sm hover:bg-cyan-500/10">
                 Learn More
               </button>
             </div>
           </div>
 
           {/* Right Column: Login Card */}
-          <div className="relative">
-            {/* Glow Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-3xl blur-2xl"></div>
+          <div className="relative lg:h-full flex items-stretch">
+            {/* Animated Glow Effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/30 to-blue-500/30 rounded-3xl blur-3xl opacity-50 animate-pulse"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-cyan-500/20 rounded-3xl blur-2xl opacity-40" style={{ animationDelay: "1s" }}></div>
 
-            {/* Card */}
-            <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700/50 rounded-3xl p-8 backdrop-blur-2xl">
-              {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-cyan-500/20 to-transparent rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+            {/* Card Container */}
+            <div className="relative w-full bg-gradient-to-br from-slate-800/60 via-slate-800/40 to-slate-900/60 border border-slate-700/50 rounded-3xl p-8 sm:p-12 backdrop-blur-xl shadow-2xl overflow-hidden">
+              {/* Decorative corner accent */}
+              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-cyan-500/25 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+              <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-tr from-blue-500/15 to-transparent rounded-full blur-3xl"></div>
 
-              <div className="relative space-y-6">
-                <div>
-                  <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-                  <p className="text-gray-400 text-sm">Sign in to your account to access the dashboard</p>
+              {/* Card Content */}
+              <div className="relative space-y-8">
+                {/* Header */}
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-bold text-white">Welcome</h2>
+                  <p className="text-gray-400 text-base">Sign in to access your building management dashboard</p>
                 </div>
 
                 {/* Login Form */}
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Username</label>
-                    <div className="relative">
+                <form onSubmit={handleLogin} className="space-y-6">
+                  {/* Username Field */}
+                  <div className="space-y-2.5">
+                    <label className="block text-sm font-semibold text-gray-300">Username</label>
+                    <div className="relative group">
                       <input
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         placeholder="your_username"
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30 transition-all"
+                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700/60 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/70 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 backdrop-blur-sm"
                       />
-                      <svg className="absolute right-4 top-3.5 w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                    <div className="relative">
+                  {/* Password Field */}
+                  <div className="space-y-2.5">
+                    <label className="block text-sm font-semibold text-gray-300">Password</label>
+                    <div className="relative group">
                       <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30 transition-all"
+                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700/60 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/70 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 backdrop-blur-sm"
                       />
-                      <svg className="absolute right-4 top-3.5 w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-600 group-focus-within:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
                     </div>
                   </div>
 
+                  {/* Error Message */}
                   {error && (
-                    <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-                      <p className="text-red-400 text-sm font-medium">{error}</p>
+                    <div className="p-4 bg-red-500/15 border border-red-500/30 rounded-xl backdrop-blur-sm">
+                      <div className="flex items-start gap-3">
+                        <svg className="w-5 h-5 text-red-400 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                        <p className="text-red-300 text-sm font-medium">{error}</p>
+                      </div>
                     </div>
                   )}
 
+                  {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg shadow-cyan-500/20"
+                    className="w-full py-4 bg-gradient-to-r from-cyan-500 via-cyan-500 to-blue-600 hover:from-cyan-600 hover:via-cyan-600 hover:to-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/40 shadow-lg shadow-cyan-500/20"
                   >
                     {loading ? (
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                        Signing in...
+                      <div className="flex items-center justify-center gap-3">
+                        <div className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <span>Signing in...</span>
                       </div>
                     ) : (
-                      "Sign In"
+                      <span>Sign In</span>
                     )}
                   </button>
                 </form>
 
                 {/* Divider */}
-                <div className="relative">
+                <div className="relative py-2">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-700"></div>
+                    <div className="w-full border-t border-slate-700/50"></div>
                   </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-gradient-to-br from-gray-800/80 to-gray-900/80 text-gray-500">Demo Accounts</span>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="px-3 bg-gradient-to-br from-slate-800/60 via-slate-800/40 to-slate-900/60 text-slate-500 font-medium">Quick Access</span>
                   </div>
                 </div>
 
                 {/* Demo Accounts */}
-                <div className="space-y-2 max-h-48 overflow-y-auto">
+                <div className="space-y-2 max-h-52 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest px-2">Demo Credentials</p>
                   {[
-                    { name: "John Doe (Renter)", user: "john_renter", pass: "password123" },
-                    { name: "Building Manager", user: "admin_manager", pass: "asade123" },
-                    { name: "Social Housing Manager", user: "social_housing_mgr", pass: "social123" },
-                    { name: "System Admin", user: "system_admin", pass: "admin123" },
-                    { name: "Corporate Manager", user: "corporate_mgr", pass: "corporate456" },
+                    { name: "🏠 Building Manager", user: "admin_manager", pass: "asade123" },
+                    { name: "🏘️ Social Housing Manager", user: "social_housing_mgr", pass: "social123" },
+                    { name: "🔐 System Admin", user: "system_admin", pass: "admin123" },
+                    { name: "🏢 Corporate Manager", user: "corporate_mgr", pass: "corporate456" },
+                    { name: "👤 Renter Account", user: "john_renter", pass: "password123" },
                   ].map((account, idx) => (
                     <button
                       key={idx}
@@ -348,12 +389,12 @@ export default function Home() {
                         setUsername(account.user);
                         setPassword(account.pass);
                       }}
-                      className="w-full p-3 rounded-lg bg-gray-900/50 border border-gray-700/50 hover:border-cyan-500/30 hover:bg-gray-900/70 transition-all text-left group"
+                      className="w-full p-3.5 rounded-xl bg-slate-900/40 border border-slate-700/40 hover:border-cyan-500/50 hover:bg-slate-900/60 transition-all duration-300 text-left group backdrop-blur-sm"
                     >
-                      <p className="text-xs font-semibold text-gray-400 group-hover:text-cyan-400 transition-colors">
+                      <p className="text-sm font-semibold text-slate-300 group-hover:text-cyan-300 transition-colors flex items-center gap-2">
                         {account.name}
                       </p>
-                      <p className="text-xs text-gray-600 group-hover:text-gray-500 font-mono">
+                      <p className="text-xs text-slate-600 group-hover:text-slate-500 font-mono mt-1">
                         {account.user} / {account.pass}
                       </p>
                     </button>
@@ -366,8 +407,8 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-0 left-0 right-0 py-6 text-center text-sm text-gray-600">
-        <p>© 2024 DingDong Building Management System. All rights reserved.</p>
+      <div className="absolute bottom-0 left-0 right-0 py-8 text-center border-t border-slate-700/30 bg-gradient-to-t from-slate-950/80 to-transparent">
+        <p className="text-sm text-slate-500 font-medium">© 2024 DingDong Building Management System. All rights reserved.</p>
       </div>
     </div>
   );
