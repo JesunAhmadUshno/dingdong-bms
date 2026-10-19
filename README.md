@@ -29,6 +29,27 @@ A comprehensive, production-ready Building Management System (BMS) built with mo
 - ✅ **Responsive Design** - Mobile-friendly Tailwind CSS styling
 - ✅ **Production Ready** - 0 build errors, optimized performance
 
+## Start here
+
+1. Follow the Quick Start below. The app runs at
+   `http://localhost:3000`.
+2. Log in with the demo LEASEHOLDER account below. Open the
+   Leaseholder dashboard and walk its 6 tabs.
+3. Add an occupant. Refresh the page. The occupant is still there:
+   that round trip is the SQLite persistence proof.
+4. Read `ARCHITECTURE.md` and `DATABASE_AND_AUTH.md` for the design.
+
+## Facts
+
+| Item | Value |
+| :--- | :--- |
+| Version | 0.3.0 |
+| User roles | 11 |
+| Session timeout | 15 minutes, with restore on refresh |
+| Frontend files | 51 `.tsx` files under `web/` |
+| Docs | 32 markdown files, most of them role and manager guides |
+| Database | One SQLite file, created on first run |
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -40,7 +61,7 @@ A comprehensive, production-ready Building Management System (BMS) built with mo
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dingdong-bms.git
+git clone https://github.com/JesunAhmadUshno/dingdong-bms.git
 cd dingdong-bms/web
 
 # Install dependencies
@@ -72,6 +93,19 @@ RENTER:
   Username: john_renter
   Password: renterpass123
 ```
+
+## Screens
+
+Screenshot slots. No screenshots ship in this repo yet. Capture each
+screen from the running app and save it at the path shown.
+
+- SLOT `docs/screens/login.png`: the login page.
+- SLOT `docs/screens/leaseholder-dashboard.png`: the Leaseholder
+  dashboard, Overview tab.
+- SLOT `docs/screens/occupants.png`: the Occupants tab with the add
+  form open.
+- SLOT `docs/screens/admin-dashboard.png`: the Admin dashboard.
+- SLOT `docs/screens/renter-portal.png`: the Renter portal home.
 
 ## 📁 Project Structure
 
