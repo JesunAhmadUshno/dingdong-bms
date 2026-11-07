@@ -19,6 +19,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const SESSION_ID_KEY = "dingdong_session_id";
 const SESSION_TOKEN_KEY = "dingdong_session_token";
 
+// Session headers for authenticated API calls (e.g. /api/occupants), from the pair login stored.
+export function sessionHeaders(): Record<string, string> {
+  return {
+    "x-session-id": localStorage.getItem(SESSION_ID_KEY) || "",
+    "x-session-token": localStorage.getItem(SESSION_TOKEN_KEY) || "",
+  };
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<(User & { role: Role }) | null>(null);
   const [loading, setLoading] = useState(true);

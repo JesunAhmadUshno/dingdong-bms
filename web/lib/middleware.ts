@@ -79,7 +79,7 @@ export function withSession(
 ): (req: NextRequest, context: MiddlewareContext) => Promise<NextResponse> {
   return async (req: NextRequest, context: MiddlewareContext) => {
     try {
-      const session = await validateSession();
+      const session = await validateSession(req);
       context.userId = session.userId;
       context.username = session.username;
       return await handler(req, context);

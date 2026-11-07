@@ -2,14 +2,9 @@
  * API authentication utilities for session validation
  */
 
-import { cookies } from 'next/headers';
 import { AppError } from './error-handler';
 import { logger } from './logger';
-import Database from 'better-sqlite3';
-import path from 'path';
-
-const SESSION_TOKEN_COOKIE = 'dingdong_session_token';
-const SESSION_ID_COOKIE = 'dingdong_session_id';
+import db from './db';
 
 export interface SessionData {
   id: string;
@@ -20,43 +15,30 @@ export interface SessionData {
 }
 
 /**
- * Get database connection
- */
-function getDatabase(): Database.Database {
-  const dbPath = path.join(process.cwd(), 'dingdong.db');
-  const db = new Database(dbPath);
-  db.pragma('journal_mode = WAL');
-  return db;
-}
-
-/**
- * Validate session token and retrieve session data
+ * Validate session token and retrieve session data.
+ * Reads the x-session-id / x-session-token headers that lib/auth-context.tsx sends
+ * (the pair POST /api/auth/session returns and the client keeps in localStorage).
  * @throws AuthenticationError if session is invalid or expired
  */
-export async function validateSession(): Promise<SessionData> {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get(SESSION_TOKEN_COOKIE)?.value;
-  const sessionId = cookieStore.get(SESSION_ID_COOKIE)?.value;
+export async function validateSession(req: Request): Promise<SessionData> {
+  const sessionToken = req.headers.get('x-session-token');
+  const sessionId = req.headers.get('x-session-id');
 
   if (!sessionToken || !sessionId) {
     throw new AppError('NO_SESSION', 401, 'No active session');
   }
 
   try {
-    const db = getDatabase();
-
     // Query session from database
     const session = db
       .prepare(
         `
-      SELECT id, username, user_id as userId, created_at as createdAt, expires_at as expiresAt
+      SELECT session_id as id, username, user_id as userId, created_at as createdAt, expires_at as expiresAt
       FROM sessions
-      WHERE id = ? AND token = ?
+      WHERE session_id = ? AND token = ?
     `
       )
       .get(sessionId, sessionToken) as any;
-
-    db.close();
 
     if (!session) {
       logger.logSecurity('Invalid session token used', { sessionId });
@@ -94,9 +76,9 @@ export async function validateSession(): Promise<SessionData> {
 /**
  * Get session without throwing (returns null if no session)
  */
-export async function getSessionIfExists(): Promise<SessionData | null> {
+export async function getSessionIfExists(req: Request): Promise<SessionData | null> {
   try {
-    return await validateSession();
+    return await validateSession(req);
   } catch {
     return null;
   }
@@ -105,33 +87,29 @@ export async function getSessionIfExists(): Promise<SessionData | null> {
 /**
  * Extract user ID from session
  */
-export async function getUserId(): Promise<number> {
-  const session = await validateSession();
+export async function getUserId(req: Request): Promise<number> {
+  const session = await validateSession(req);
   return session.userId;
 }
 
 /**
  * Extract username from session
  */
-export async function getUsername(): Promise<string> {
-  const session = await validateSession();
+export async function getUsername(req: Request): Promise<string> {
+  const session = await validateSession(req);
   return session.username;
 }
 
 /**
  * Check if user owns a specific occupant (for access control)
  */
-export async function canAccessOccupant(occupantId: number): Promise<boolean> {
+export async function canAccessOccupant(req: Request, occupantId: number): Promise<boolean> {
   try {
-    const session = await validateSession();
-    const db = getDatabase();
-
+    const session = await validateSession(req);
     // Check if user_id matches occupant's user_id
     const occupant = db
       .prepare('SELECT user_id FROM occupants WHERE id = ? LIMIT 1')
       .get(occupantId) as any;
-
-    db.close();
 
     if (!occupant) {
       return false;

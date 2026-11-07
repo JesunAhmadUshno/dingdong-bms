@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --no-warnings --test tests/smoke.test.mjs"
+    "test": "node --experimental-transform-types --no-warnings --test tests/smoke.test.mjs tests/api.test.mjs"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.2",

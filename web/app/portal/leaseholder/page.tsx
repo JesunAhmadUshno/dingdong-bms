@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth, sessionHeaders } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useToast } from "@/lib/toast";
@@ -110,7 +110,7 @@ export default function LeaseholderDashboard() {
 
   const loadOccupants = async () => {
     try {
-      const response = await fetch("/api/occupants?property_id=2");
+      const response = await fetch("/api/occupants?property_id=2", { headers: sessionHeaders() });
       if (response.ok) {
         const result = await response.json();
         if (result.success) {
@@ -143,6 +143,7 @@ export default function LeaseholderDashboard() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...sessionHeaders(),
         },
         body: JSON.stringify({
           lease_id: 2,
@@ -177,6 +178,7 @@ export default function LeaseholderDashboard() {
       try {
         const response = await fetch(`/api/occupants?occupant_id=${occupant_id}`, {
           method: "DELETE",
+          headers: sessionHeaders(),
         });
 
         if (response.ok) {
