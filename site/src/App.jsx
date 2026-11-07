@@ -366,7 +366,7 @@ function Claims() {
     ['Real SQLite database for auth', `Sessions and occupants live in SQLite; logins are checked against the ${S.loginSource} with plaintext passwords.`, 'partial'],
     ['Add an occupant, refresh, still there', `The occupant API reads cookies nothing sets and a column the sessions table lacks (see Access). Traced, not run.`, 'fail (traced)'],
     ['Performance figures', `${R.perfLines.length} README lines (session creation, list load, page refresh...). Benchmark scripts or recorded outputs in the repo: ${R.benchFiles.length}.`, 'unmeasured'],
-    ['"Production Ready - 0 build errors"', `Committed build logs: ${R.buildLogs.length}. CI workflows that build web/: ${R.appCI}. Test files under web/: ${R.appTests} (the smoke test added with this page; it does not build the app).`, 'unmeasured'],
+    ['"Production Ready - 0 build errors"', `Committed build logs: ${R.buildLogs.length}. CI workflows that build web/: ${R.appCI}. Test files under web/: ${R.appTests} (seed-data and session smoke tests, run in CI; they do not build the app).`, 'unmeasured'],
   ];
   const tone = (s) => (s === 'pass' ? 'good' : s === 'unmeasured' || s === 'partial' ? 'warn' : 'bad');
   const count = (k) => rows.filter((r) => tone(r[2]) === k).length;

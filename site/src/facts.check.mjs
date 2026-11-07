@@ -101,7 +101,7 @@ const treeMissing = treeRows.filter((r) => !r.ok).map((r) => r.path);
 const perfLines = must(readme.match(/## 📈 Performance\n+([\s\S]*?)\n\n/), 'README performance')[1].split('\n').filter((l) => l.startsWith('- '));
 const benchFiles = files.filter((f) => /bench|perf/i.test(path.basename(f)) && !f.endsWith('.md'));
 const appTests = files.filter((f) => f.startsWith('web/') && /\.test\.(m?js|ts)$/.test(f)).length;
-const appCI = files.filter((f) => f.startsWith('.github/workflows/') && /working-directory: web\b/.test(read(f))).length;
+const appCI = files.filter((f) => f.startsWith('.github/workflows/') && /run: npm run build\s+working-directory: web\b/.test(read(f))).length;
 const buildLogs = files.filter((f) => /build.*\.(log|txt)$/i.test(f));
 
 // ---------- known-answer assertions ----------
