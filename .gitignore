@@ -46,3 +46,10 @@ data/
 # OS
 Thumbs.db
 .DS_Store
+
+# Live dashboard (site/)
+site/.rubric/
+site/node_modules/
+site/dist/
+site/src/facts.json
+!site/package-lock.json
