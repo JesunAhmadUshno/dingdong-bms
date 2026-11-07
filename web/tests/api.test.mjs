@@ -97,3 +97,16 @@ test('GET /api/auth/session rejects a session whose expires_at has passed', asyn
   const res = await session.GET(req('GET', '/api/auth/session', { headers: auth }));
   assert.equal(res.status, 401);
 });
+
+test('PUT /api/occupants only updates known occupant columns', async () => {
+  const auth = await login();
+  const put = (body) => occupants.PUT(req('PUT', '/api/occupants', { headers: auth, body }));
+  // The key becomes `name = (SELECT token ...), phone = ?`: copies a session token into a readable row.
+  const injected = await put({ occupant_id: 1, 'name = (SELECT token FROM sessions LIMIT 1), phone': 'x' });
+  const names = db.prepare('SELECT name FROM occupants').all().map((r) => r.name);
+  assert.ok(!names.includes(auth['x-session-token']) && names.every((n) => !/^[0-9a-f]{64}$/.test(n)), 'no session token copied into occupants');
+  assert.equal(injected.status, 400);
+  assert.equal((await put({ occupant_id: 1, nope: 'x' })).status, 400);
+  assert.equal((await put({ occupant_id: 1, phone: '416-555-0999' })).status, 200);
+  assert.equal(db.prepare('SELECT phone FROM occupants WHERE occupant_id = 1').get().phone, '416-555-0999');
+});

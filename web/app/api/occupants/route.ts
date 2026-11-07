@@ -126,6 +126,8 @@ export const POST = withMiddleware(
   })
 )
 
+const UPDATABLE_COLUMNS = ['lease_id', 'property_id', 'unit_id', 'name', 'email', 'phone', 'relationshipToLeaseholder', 'registrationDate', 'status'];
+
 // PUT - Update occupant - with session validation
 export const PUT = withMiddleware(
   withSession(async (request: NextRequest, context: MiddlewareContext) => {
@@ -144,6 +146,12 @@ export const PUT = withMiddleware(
           400,
           'No fields to update'
         );
+      }
+
+      // Column names go into the SQL text, so only known occupant columns are allowed.
+      const unknown = Object.keys(updates).filter((key) => !UPDATABLE_COLUMNS.includes(key));
+      if (unknown.length > 0) {
+        throw new ValidationError(unknown.map((key) => ({ path: key, message: 'Not an updatable field' })));
       }
 
       const updateFields = Object.keys(updates)
