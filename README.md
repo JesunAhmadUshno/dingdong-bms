@@ -1,6 +1,8 @@
 # DingDong BMS - Building Management System
 
-A comprehensive, production-ready Building Management System (BMS) built with modern web technologies. Manage properties, leases, occupants, maintenance, and financials all in one unified platform.
+A comprehensive Building Management System (BMS) prototype built with modern web technologies. Manage properties, leases, occupants, maintenance, and financials all in one unified platform.
+
+Live dashboard: https://jesunahmadushno.github.io/dingdong-bms/ (a source-level audit of this repo: role explorer, session-expiry reproduction, README claims checked against the code)
 
 ![Version](https://img.shields.io/badge/version-0.3.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
@@ -27,7 +29,7 @@ A comprehensive, production-ready Building Management System (BMS) built with mo
 - ✅ **Data Persistence** - SQLite database with schema management
 - ✅ **Real-time Updates** - Dynamic data loading and refresh
 - ✅ **Responsive Design** - Mobile-friendly Tailwind CSS styling
-- ✅ **Production Ready** - 0 build errors, optimized performance
+- ⚠️ **Prototype** - no committed build log or benchmark yet; see [Known issues](#known-issues)
 
 ## Start here
 
@@ -45,9 +47,9 @@ A comprehensive, production-ready Building Management System (BMS) built with mo
 | :--- | :--- |
 | Version | 0.3.0 |
 | User roles | 11 |
-| Session timeout | 15 minutes, with restore on refresh |
+| Session timeout | 15 minutes intended, with restore on refresh (see Known issues) |
 | Frontend files | 51 `.tsx` files under `web/` |
-| Docs | 32 markdown files, most of them role and manager guides |
+| Docs | 33 markdown files, most of them role and manager guides |
 | Database | One SQLite file, created on first run |
 
 ## 🚀 Quick Start
@@ -86,12 +88,12 @@ ADMIN:
   Password: admin123
 
 OWNER:
-  Username: owner
-  Password: ownerpass789
+  Username: mr_owner
+  Password: owner789
 
 RENTER:
   Username: john_renter
-  Password: renterpass123
+  Password: password123
 ```
 
 ## Screens
@@ -121,20 +123,19 @@ dingdong-bms/
 │   │   │   ├── leaseholder/      # Leaseholder dashboard (6 tabs)
 │   │   │   ├── owner/            # Owner dashboard
 │   │   │   └── renter/           # Renter portal
-│   │   ├── login/                # Login page
 │   │   └── page.tsx              # Home page
 │   ├── lib/
 │   │   ├── auth-context.tsx      # Global auth state management
 │   │   ├── database.ts           # User and role definitions
-│   │   ├── db.ts                 # SQLite database initialization
-│   │   └── utils.ts              # Helper functions
+│   │   └── db.ts                 # SQLite database initialization
 │   ├── data/                     # SQLite database file (generated)
 │   │   └── dingdong.db           # Primary database
 │   ├── package.json              # Dependencies and scripts
+│   ├── tests/                    # Dependency-free smoke tests (npm test)
 │   ├── tsconfig.json             # TypeScript configuration
-│   ├── tailwind.config.js         # Tailwind CSS configuration
 │   └── .gitignore                # Git ignore rules
-└── documentation/                 # Project documentation
+├── site/                          # Live dashboard (Vite + React, GitHub Pages)
+└── docs/                          # Research review
 ```
 
 ## 🔧 Development
@@ -233,6 +234,11 @@ DELETE /api/occupants?occupant_id=1     Delete occupant
 
 ## 🧪 Testing
 
+### Smoke tests
+`cd web && npm test` runs dependency-free checks (Node 22.13+): seed-data
+consistency and the session-expiry comparison in SQLite. CI runs them on
+every push to master.
+
 ### Manual Testing Checklist
 - [ ] Login with alice_lease / leasepass456
 - [ ] Navigate to Leaseholder Dashboard
@@ -243,6 +249,9 @@ DELETE /api/occupants?occupant_id=1     Delete occupant
 - [ ] Test with different user roles
 
 ## 📈 Performance
+
+Not measured: no benchmark script or recorded output exists in this repo yet,
+so treat these figures as targets, not results.
 
 - Session creation: ~20ms
 - Occupant list load: ~5ms
@@ -292,11 +301,23 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Found a bug? Want a new feature? Please open an issue on GitHub with appropriate templates.
 
+## Known issues
+
+Found by a source review; details and fix costs in [docs/research-review.md](docs/research-review.md).
+
+- **Sessions outlive 15 minutes.** `expires_at` is stored as an ISO string and
+  compared as text with SQLite's `datetime('now')`, so a session stays valid until
+  the next UTC midnight. Reproduced in `web/tests/smoke.test.mjs` and on the live dashboard.
+- **The occupant API most likely returns 401** (traced from source, not run):
+  `validateSession` reads cookies nothing sets, queries `sessions.id` (the key is
+  `session_id`) and opens `./dingdong.db` instead of `data/dingdong.db`.
+- **Role permissions are not enforced server-side**, and the session row stores
+  `role_name = 'USER'` for roles 5 to 10.
+- **Logins use plaintext passwords** from the in-memory `USERS` array.
+
 ## 📞 Support
 
-- 📧 Email: support@dingdongbms.com
-- 💬 Discord: [Join our community](https://discord.gg/dingdongbms)
-- 📖 Documentation: [Full docs](https://docs.dingdongbms.com)
+Open an issue on GitHub. There is no dedicated email, chat or docs site yet.
 
 ## 🎓 Learning Resources
 
