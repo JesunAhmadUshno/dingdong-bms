@@ -151,6 +151,7 @@ assert.equal(cmpRL.shared.length + cmpRL.onlyA.length, ROLES[0].permissions.leng
 // inventory vs README facts table
 assert.equal(tsx.length, factNum('Frontend files'), 'tsx count vs README');
 assert.equal(ROLES.length, factNum('User roles'));
+assert.equal(md.length, factNum('Docs'), 'markdown count vs README');
 assert.equal(sessionMinutes, factNum('Session timeout'));
 
 // access-path findings the page states
