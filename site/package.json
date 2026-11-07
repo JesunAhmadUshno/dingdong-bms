@@ -1,0 +1,18 @@
+{
+  "name": "dingdong-bms-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --experimental-strip-types --no-warnings src/facts.check.mjs && vite",
+    "build": "node --experimental-strip-types --no-warnings src/facts.check.mjs && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "vite": "6.4.5"
+  }
+}
