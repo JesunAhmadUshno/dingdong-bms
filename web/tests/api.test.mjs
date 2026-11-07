@@ -88,3 +88,12 @@ test('occupant API still rejects requests without a valid session', async () => 
   const bad = { 'x-session-id': 'nope', 'x-session-token': 'nope' };
   assert.equal((await occupants.GET(req('GET', '/api/occupants', { headers: bad }))).status, 401);
 });
+
+test('GET /api/auth/session rejects a session whose expires_at has passed', async () => {
+  const auth = await login();
+  assert.equal((await session.GET(req('GET', '/api/auth/session', { headers: auth }))).status, 200, 'fresh session is live');
+  const expired = new Date(Date.now() - 1000).toISOString(); // POST stores toISOString(); one second ago
+  db.prepare('UPDATE sessions SET expires_at = ? WHERE session_id = ?').run(expired, auth['x-session-id']);
+  const res = await session.GET(req('GET', '/api/auth/session', { headers: auth }));
+  assert.equal(res.status, 401);
+});

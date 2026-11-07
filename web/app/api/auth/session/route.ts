@@ -127,7 +127,7 @@ export const GET = withMiddleware(
         throw new AuthenticationError('Missing session credentials');
       }
 
-      const stmt = db.prepare("SELECT * FROM sessions WHERE session_id = ? AND token = ? AND expires_at > datetime('now')");
+      const stmt = db.prepare("SELECT * FROM sessions WHERE session_id = ? AND token = ? AND datetime(expires_at) > datetime('now')"); // datetime() normalises the stored ISO string so the two compare as times, not text
       const session = stmt.get(sessionId, token) as any;
 
       if (!session) {
