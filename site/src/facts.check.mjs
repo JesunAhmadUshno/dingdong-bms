@@ -48,7 +48,7 @@ const readme = read('README.md');
 
 const sessionMinutes = +must(route.match(/Date\.now\(\) \+ (\d+) \* 60 \* 1000/), 'session minutes')[1];
 const storesIso = /expiresAt\.toISOString\(\)/.test(route);
-const whereClause = must(route.match(/expires_at > datetime\('now'\)/), 'GET WHERE clause')[0];
+const whereClause = must(route.match(/datetime\(expires_at\) > datetime\('now'\)/), 'GET WHERE clause (datetime-normalised)')[0];
 const ternary = Object.fromEntries([...route.matchAll(/role_id === (\d+) \? '(\w+)'/g)].map((m) => [+m[1], m[2]]));
 const ternaryFallback = must(route.match(/: '(\w+)',\s*\n\s*JSON\.stringify/), 'ternary fallback')[1];
 const loginSource = /USERS\.find\(/.test(route) ? 'in-memory USERS array (web/lib/database.ts)' : 'database';
@@ -57,20 +57,21 @@ const capPct = +must(PROPERTY_TYPES.find((t) => t.type_name === 'PRIVATE_RENTAL'
 const gtiPct = +must(PROPERTY_TYPES.find((t) => t.type_name === 'AFFORDABLE_HOUSING').rent_control_policy.match(/max (\d+)% of household income/), 'GTI share')[1];
 const gtiSeed = must(dbRaw.match(/monthly_rent: (\d+), \/\/ (\d+)% of \$(\d+) income/), 'unit 12A GTI comment');
 
-const cookieNames = [...apiAuth.matchAll(/_COOKIE = '(\w+)'/g)].map((m) => m[1]);
+const validateReadsHeaders = /headers\.get\('x-session-id'\)/.test(apiAuth) && /headers\.get\('x-session-token'\)/.test(apiAuth);
 const webSrc = tsAll.map((f) => read(f)).join('\n');
 const cookieSetters = (webSrc.match(/cookies\(\)\.set|cookieStore\.set|\.cookies\.set|document\.cookie|Set-Cookie/g) || []).length;
-const validateSelectsId = /FROM sessions\s+WHERE id = \?/.test(apiAuth);
+const validateSelectsSessionId = /FROM sessions\s+WHERE session_id = \?/.test(apiAuth);
 const sessionsCols = must(dbTs.match(/CREATE TABLE IF NOT EXISTS sessions \(([\s\S]*?)\);/), 'sessions table')[1]
   .split('\n').map((l) => l.trim().split(/\s+/)[0]).filter((c) => /^[a-z_]+$/.test(c));
 const sessionsPk = must(dbTs.match(/(\w+) TEXT PRIMARY KEY/), 'sessions PK')[1];
 const dbPathMain = must(dbTs.match(/path\.join\(process\.cwd\(\), ([^)]*)\)/), 'db.ts path')[1].replace(/['\s]/g, '').replace(',', '/');
-const dbPathAuth = must(apiAuth.match(/path\.join\(process\.cwd\(\), ([^)]*)\)/), 'api-auth path')[1].replace(/['\s]/g, '').replace(',', '/');
+const authSharedDb = /import db from '\.\/db'/.test(apiAuth) && !/new Database\(/.test(apiAuth);
 const occWithSession = (occRoute.match(/withSession\(/g) || []).length;
 const allPerms = [...new Set(ROLES.flatMap((r) => r.permissions))];
 const occPermChecks = allPerms.filter((p) => occRoute.includes(`'${p}'`) || occRoute.includes(`"${p}"`)).length;
 const leaseFetches = (leasePage.match(/fetch\(/g) || []).length;
-const leaseFetchSessionHeaders = (leasePage.match(/x-session-/g) || []).length;
+const leaseFetchSessionHeaders = (leasePage.match(/sessionHeaders\(\)/g) || []).length;
+const occUpdateAllowList = /UPDATABLE_COLUMNS\.includes\(key\)/.test(occRoute);
 const clientStore = /localStorage\.setItem\(SESSION_ID_KEY/.test(authCtx) ? 'localStorage' : 'unknown';
 const clientHeaders = (authCtx.match(/"x-session-id"/g) || []).length;
 const rateLimitTodo = /TODO: Implement actual rate limiting/.test(read('web/lib/middleware.ts'));
@@ -122,13 +123,15 @@ assert.equal(sessionCheck(t10, 14 * 60 + 1, 15).accepted, false, 'rejected after
 const t2350 = Date.UTC(2026, 0, 15, 23, 50, 0);
 assert.equal(sessionCheck(t2350, 30, 15).accepted, true); assert.equal(sessionCheck(t2350, 30, 15).actualMinutes, 24 * 60 + 10);
 assert.equal(fixedAccepted(t10, 120, 15), false); assert.equal(fixedAccepted(t10, 10, 15), true);
-// the same comparison inside real SQLite: its datetime() format and TEXT ordering match logic.js
+// the same comparisons inside real SQLite: the old text compare matches sessionCheck, the shipped
+// datetime(expires_at) compare matches fixedAccepted
 const sq = new DatabaseSync(':memory:');
-const cmp = sq.prepare("SELECT datetime(? , 'unixepoch') AS now, ? > datetime(?, 'unixepoch') AS v");
+const cmp = sq.prepare("SELECT datetime(? , 'unixepoch') AS now, ? > datetime(?, 'unixepoch') AS v, datetime(?) > datetime(?, 'unixepoch') AS f");
 for (const [login, mins] of [[t10, 10], [t10, 120], [t10, 900], [t2350, 30], [t2350, 1500]]) {
   const r = sessionCheck(login, mins, sessionMinutes), nowSec = (login + mins * 60000) / 1000;
-  const row = cmp.get(nowSec, r.expiresAt, nowSec);
+  const row = cmp.get(nowSec, r.expiresAt, nowSec, r.expiresAt, nowSec);
   assert.equal(row.now, r.now); assert.equal(row.v === 1, r.accepted, `sqlite vs js at ${mins} min`);
+  assert.equal(row.f === 1, fixedAccepted(login, mins, sessionMinutes), `fixed sqlite vs js at ${mins} min`);
 }
 sq.close();
 
@@ -155,8 +158,10 @@ assert.equal(md.length, factNum('Docs'), 'markdown count vs README');
 assert.equal(sessionMinutes, factNum('Session timeout'));
 
 // access-path findings the page states
-assert.equal(cookieSetters, 0); assert.ok(validateSelectsId); assert.ok(!sessionsCols.includes('id')); assert.equal(sessionsPk, 'session_id');
-assert.equal(leaseFetchSessionHeaders, 0); assert.equal(occPermChecks, 0);
+assert.ok(validateReadsHeaders, 'validateSession reads the session headers'); assert.ok(validateSelectsSessionId); assert.equal(sessionsPk, 'session_id');
+assert.ok(authSharedDb, 'api-auth uses the shared lib/db.ts connection');
+assert.equal(leaseFetchSessionHeaders, leaseFetches, 'every leaseholder occupant fetch sends the session headers');
+assert.ok(occUpdateAllowList, 'PUT /api/occupants allow-lists columns'); assert.equal(occPermChecks, 0);
 
 const facts = {
   inventory: { tsx: tsx.length, md: md.length, tsLines, tsFiles: tsAll.length, routeFiles: routeFiles.length, handlers },
@@ -167,7 +172,7 @@ const facts = {
   occRoles,
   session: { minutes: sessionMinutes, storesIso, whereClause, ternary, ternaryFallback, toUser: toUser.map((r) => r.role_name), loginSource },
   rent: { capPct, gtiPct, gtiSeed: { rent: +gtiSeed[1], pct: +gtiSeed[2], income: +gtiSeed[3] } },
-  access: { cookieNames, cookieSetters, validateSelectsId, sessionsPk, sessionsHasId: sessionsCols.includes('id'), dbPathMain, dbPathAuth,
+  access: { cookieSetters, validateReadsHeaders, validateSelectsSessionId, sessionsPk, dbPathMain, authSharedDb, occUpdateAllowList,
     occWithSession, occPermChecks, permCount: allPerms.length, leaseFetches, leaseFetchSessionHeaders, clientStore, clientHeaders, rateLimitTodo },
   readme: { creds, credsOk: creds.filter((c) => c.ok).length, treeRows: treeRows.length, treeMissing, perfLines, benchFiles, buildLogs, appTests, appCI },
   deps: JSON.parse(read('web/package.json')),

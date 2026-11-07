@@ -118,12 +118,12 @@ function Hero() {
     <header className="card hero window" id="top" data-title="dingdong-bms — README.md">
       <div className="head">
         <p className="eyebrow">Source audit · Next.js {F.deps.dependencies.next} prototype</p>
-        <Pill s="warn">● Session bug reproduced</Pill>
+        <Pill s="good">● Session and occupant bugs fixed</Pill>
       </div>
-      <h1>DingDong BMS models <em>{F.roles.length} housing roles</em> across {F.propertyTypes.length} Canadian tenure types, and its own source shows where the {S.minutes}-minute session and the occupant API stop matching the README.</h1>
+      <h1>DingDong BMS models <em>{F.roles.length} housing roles</em> across {F.propertyTypes.length} Canadian tenure types, and its own source shows how the {S.minutes}-minute session and the occupant API came to match the README.</h1>
       <p className="sub">
         DingDong is a building-management prototype: role portals, leases, occupants and rent rules on Next.js and SQLite.
-        It needs a Node server, so it can't run here. This page reads its source instead. It explores the role model, reproduces the session check in your browser,
+        It needs a Node server, so it can't run here. This page reads its source instead. It explores the role model, replays the old and fixed session check in your browser,
         traces the occupant API path, and scores each README claim as pass, fail or unmeasured.
       </p>
       <div className="actions">
@@ -196,7 +196,7 @@ function Roles() {
 function Session() {
   const [loginQ, setLoginQ] = useState(40); // quarter-hours after 00:00 UTC
   const [since, setSince] = useState(120);
-  const [fix, setFix] = useState(false);
+  const [fix, setFix] = useState(true);
   const day = Date.UTC(2026, 0, 15);
   const login = day + loginQ * 15 * 60000;
   const r = sessionCheck(login, since, S.minutes);
@@ -206,16 +206,16 @@ function Session() {
   const x = (m) => pad.l + (Math.min(max, m) / max) * (W - pad.l - pad.r);
   const loginTime = new Date(login).toISOString().slice(11, 16);
   return (
-    <section id="session" className="card window reveal" data-title="api/auth/session/route.ts — live reproduction">
+    <section id="session" className="card window reveal" data-title="api/auth/session/route.ts — before and after the fix">
       <div className="head">
         <div>
           <p className="eyebrow">Session lab · reproduction of repo logic</p>
-          <h2>A {S.minutes}-minute session that lasts until UTC midnight.</h2>
+          <h2>A {S.minutes}-minute session that used to last until UTC midnight.</h2>
           <p className="sub">
             The login handler stores <code>expires_at</code> with <code>toISOString()</code> (<span className="mono">{EX.expiresAt}</span>).
-            The session check runs <code>{S.whereClause}</code>, and SQLite compares the two as text against <span className="mono">{EX.now}</span>.
-            On the same date the 11th character decides: <code>T</code> (0x54) sorts after a space (0x20), so an expired session still passes until the date changes.
-            This page runs that exact comparison; the build checks it against real SQLite.
+            The session check used to run <code>expires_at &gt; datetime('now')</code>, so SQLite compared the two as text against <span className="mono">{EX.now}</span>.
+            On the same date the 11th character decided: <code>T</code> (0x54) sorts after a space (0x20), so an expired session still passed until the date changed.
+            The route now runs <code>{S.whereClause}</code>, which compares both as times. This page runs both comparisons; the build checks them against real SQLite.
           </p>
         </div>
         <Pill s={accepted === (since < S.minutes) ? 'good' : 'bad'}>{accepted === (since < S.minutes) ? '● Behaves as intended' : '● Accepts an expired session'}</Pill>
@@ -225,16 +225,16 @@ function Session() {
         <Range label="Minutes since login" value={since} min={0} max={max} step={5} onChange={setSince} show={hm(since)} />
         <div className="field"><span className="flabel">Storage format</span>
           <div className="seg" role="group" aria-label="Storage format">
-            <button aria-pressed={!fix} onClick={() => setFix(false)}>As shipped (ISO)</button>
-            <button aria-pressed={fix} onClick={() => setFix(true)}>Proposed fix</button>
+            <button aria-pressed={!fix} onClick={() => setFix(false)}>Before the fix</button>
+            <button aria-pressed={fix} onClick={() => setFix(true)}>Now: datetime(expires_at)</button>
           </div>
         </div>
       </div>
       <div className="grid2">
         <div className="tile mono-tile">
-          <div><span className="hint">stored expires_at</span><br /><b className="mono">{fix ? r.expiresAt.replace('T', ' ').slice(0, 19) : r.expiresAt}</b></div>
+          <div><span className="hint">{fix ? 'datetime(expires_at)' : 'stored expires_at'}</span><br /><b className="mono">{fix ? r.expiresAt.replace('T', ' ').slice(0, 19) : r.expiresAt}</b></div>
           <div><span className="hint">datetime('now')</span><br /><b className="mono">{r.now}</b></div>
-          <div><span className="hint">expires_at &gt; datetime('now')</span><br /><b className={accepted ? 'ok' : 'no'}>{accepted ? 'true · session accepted' : 'false · session rejected'}</b></div>
+          <div><span className="hint">{fix ? 'datetime(expires_at)' : 'expires_at'} &gt; datetime('now')</span><br /><b className={accepted ? 'ok' : 'no'}>{accepted ? 'true · session accepted' : 'false · session rejected'}</b></div>
         </div>
         <div className="tiles" style={{ gridTemplateColumns: '1fr 1fr', marginTop: 0 }}>
           <div className="tile"><div className="num">{S.minutes}m</div><div className="cap">intended lifetime (from route.ts)</div></div>
@@ -245,12 +245,12 @@ function Session() {
         {[0, 240, 480, 720, 960, 1200, 1440].map((m) => <g key={m}><line className="axis" x1={x(m)} x2={x(m)} y1={14} y2={H - 26} /><text x={x(m)} y={H - 8} textAnchor="middle">{m / 60}h</text></g>)}
         <text x={pad.l} y={22} style={{ fill: 'var(--text)' }}>intended</text>
         <rect x={x(0)} y={28} width={Math.max(3, x(S.minutes) - x(0))} height={18} rx="4" fill="var(--good)" />
-        <text x={pad.l} y={68} style={{ fill: 'var(--text)' }}>{fix ? 'with fix' : 'as shipped'}</text>
+        <text x={pad.l} y={68} style={{ fill: 'var(--text)' }}>{fix ? 'now' : 'before fix'}</text>
         <rect x={x(0)} y={74} width={Math.max(3, x(actual) - x(0))} height={18} rx="4" fill={actual > S.minutes ? 'var(--bad)' : 'var(--good)'} opacity="0.85" />
         <line x1={x(since)} x2={x(since)} y1={10} y2={H - 26} stroke="var(--text)" strokeWidth="2" />
         <circle cx={x(since)} cy={10} r="5" fill={accepted ? 'var(--bad)' : 'var(--text)'} />
       </svg>
-      <p className="hint">Minutes since login on the x-axis (0 to 25h). The overrun depends on the login time: compare 23:30 and 23:45 UTC. The fix stores <code>toISOString().replace('T', ' ').slice(0, 19)</code>; <code>web/tests/smoke.test.mjs</code> proves both behaviours in SQLite.</p>
+      <p className="hint">Minutes since login on the x-axis (0 to 25h). The overrun depends on the login time: compare 23:30 and 23:45 UTC. The fix wraps the stored value in <code>datetime()</code>, which also covers rows already stored; <code>web/tests/api.test.mjs</code> runs the real route against an expired session.</p>
     </section>
   );
 }
@@ -265,23 +265,24 @@ function Access() {
     ['info', 'Login', `POST /api/auth/session matches ${u.username} against the ${S.loginSource}, not a database table.`],
     [stored === role.role_name ? 'good' : 'warn', 'Session row', `role_id ${u.role_id} is ${role.role_name} in ROLES; the route's ternary stores role_name '${stored}'. ${S.toUser.length} of ${F.roles.length} roles (${S.toUser.join(', ')}) become 'USER'.`],
     ['good', 'Browser keeps the session', `auth-context.tsx saves the id and token in ${A.clientStore} and sends x-session-id / x-session-token headers on ${A.clientHeaders} calls to /api/auth/session.`],
-    ['bad', 'Leaseholder page calls the occupant API', `${A.leaseFetches} fetch calls in portal/leaseholder/page.tsx; ${A.leaseFetchSessionHeaders} send a session header.`],
-    ['bad', 'withSession → validateSession', `Reads cookies ${A.cookieNames.join(' and ')}. Code that sets any cookie anywhere in web/: ${A.cookieSetters} places. The browser stores those names in localStorage, not cookies.`],
-    ['bad', 'Session lookup', `SELECT ... FROM sessions WHERE id = ?, but the sessions table's key is ${A.sessionsPk} and it has ${A.sessionsHasId ? 'an' : 'no'} id column. It also opens ${A.dbPathAuth}, while sessions are written to ${A.dbPathMain}.`],
+    ['good', 'Leaseholder page calls the occupant API', `${A.leaseFetches} fetch calls in portal/leaseholder/page.tsx; ${A.leaseFetchSessionHeaders} send the session headers via sessionHeaders().`],
+    ['good', 'withSession → validateSession', `Reads the same x-session-id / x-session-token headers (it used to read cookies that nothing sets; cookie setters in web/: ${A.cookieSetters}).`],
+    ['good', 'Session lookup', `SELECT ... FROM sessions WHERE ${A.sessionsPk} = ? on the shared connection to ${A.dbPathMain} (it used to query a missing id column in a stray dingdong.db).`],
+    ['good', 'Occupant updates', `PUT /api/occupants ${A.occUpdateAllowList ? 'only accepts known occupant columns' : 'pastes request keys into SQL'}; unknown keys get a 400 instead of reaching the UPDATE statement.`],
     ['warn', 'Authorization', `${role.role_name} ${canOcc ? 'holds' : 'does not hold'} an occupant permission, but the occupant route checks ${A.occPermChecks} of ${A.permCount} permission strings: any valid session could edit any occupant.`],
   ];
   return (
     <section id="access" className="card window reveal" data-title="lib/api-auth.ts — traced from source">
       <div className="head">
         <div>
-          <p className="eyebrow">Access-path tracer · traced from source, not executed</p>
+          <p className="eyebrow">Access-path tracer · traced from source, covered by tests</p>
           <h2>From login to the occupant API, step by step.</h2>
           <p className="sub">
-            Pick a seeded demo account. Each step is read from the files linked below, not from a running app. The likely result: the README's "add an occupant, refresh, still there" check returns 401 today.
-            That conclusion is from reading the code; nobody has run it, so treat it as a strong lead.
+            Pick a seeded demo account. Each step is read from the files linked below. The README's "add an occupant, refresh, still there" check used to return 401;
+            <code>web/tests/api.test.mjs</code> now logs in and lists, adds and removes an occupant through the real route handlers.
           </p>
         </div>
-        <Pill s="info">Static trace</Pill>
+        <Pill s="good">Tested</Pill>
       </div>
       <div className="controls" style={{ maxWidth: 360 }}>
         <Select label="Demo account (usernames only)" value={uid} onChange={setUid}>{F.users.map((x, i) => <option key={x.username} value={i}>{x.username} · {roleById[x.role_id].role_name}</option>)}</Select>
@@ -359,14 +360,14 @@ function Claims() {
   const I = F.inventory, RF = F.readmeFacts;
   const rows = [
     ['11 distinct user roles', `ROLES has ${F.roles.length} entries with unique ids.`, F.roles.length === RF.roles ? 'pass' : 'fail'],
-    [`${RF.session}-minute session timeout`, `Reproduced above: ISO expires_at compared as text with datetime('now') stays valid until UTC midnight (up to ${hm(sessionCheck(Date.UTC(2026, 0, 15), 0, S.minutes).actualMinutes)} for a 00:00 login).`, 'fail'],
+    [`${RF.session}-minute session timeout`, `Fixed: the old text compare kept sessions valid until UTC midnight (up to ${hm(sessionCheck(Date.UTC(2026, 0, 15), 0, S.minutes).actualMinutes)} for a 00:00 login). The route now runs ${S.whereClause}; web/tests/api.test.mjs checks an expired session gets a 401.`, 'pass'],
     ['Demo credentials work', `${R.credsOk} of ${R.creds.length} README logins match a seed user (checked at build time, passwords never shown).${R.creds.filter((c) => !c.ok).map((c) => ` ${c.username}: ${c.reason}.`).join('')}`, R.credsOk === R.creds.length ? 'pass' : 'fail'],
     ['Project structure tree', `${R.treeRows - R.treeMissing.length} of ${R.treeRows} listed paths exist${R.treeMissing.length ? `; missing: ${R.treeMissing.join(', ')}` : ''}.`, R.treeMissing.length ? 'fail' : 'pass'],
     [`${RF.tsx} .tsx files, ${RF.md} docs`, `Counted at build time: ${I.tsx} .tsx and ${I.md} markdown files.`, I.tsx === RF.tsx && I.md === RF.md ? 'pass' : 'fail'],
     ['Real SQLite database for auth', `Sessions and occupants live in SQLite; logins are checked against the ${S.loginSource} with plaintext passwords.`, 'partial'],
-    ['Add an occupant, refresh, still there', `The occupant API reads cookies nothing sets and a column the sessions table lacks (see Access). Traced, not run.`, 'fail (traced)'],
+    ['Add an occupant, refresh, still there', `Fixed: the occupant API now reads the session headers the browser sends (see Access). web/tests/api.test.mjs adds an occupant and reads it back.`, 'pass'],
     ['Performance figures', `${R.perfLines.length} README lines (session creation, list load, page refresh...). Benchmark scripts or recorded outputs in the repo: ${R.benchFiles.length}.`, 'unmeasured'],
-    ['"Production Ready - 0 build errors"', `Committed build logs: ${R.buildLogs.length}. CI workflows that build web/: ${R.appCI}. Test files under web/: ${R.appTests} (seed-data and session smoke tests, run in CI; they do not build the app).`, 'unmeasured'],
+    ['"Production Ready - 0 build errors"', `Committed build logs: ${R.buildLogs.length}. CI workflows that build web/: ${R.appCI}. Test files under web/: ${R.appTests} (seed-data smoke tests and API route tests, run in CI; they do not build the app).`, 'unmeasured'],
   ];
   const tone = (s) => (s === 'pass' ? 'good' : s === 'unmeasured' || s === 'partial' ? 'warn' : 'bad');
   const count = (k) => rows.filter((r) => tone(r[2]) === k).length;
@@ -388,7 +389,7 @@ function Claims() {
       </div>
       <h3 style={{ marginTop: 22 }}>Limits of this audit</h3>
       <ul className="limits">
-        <li>The Next.js app was not run. The access-path findings come from reading code; the session bug comes from reproducing its exact comparison in JavaScript and in SQLite.</li>
+        <li>This page does not run the Next.js app. The access-path and session fixes are covered by <code>web/tests/api.test.mjs</code>, which runs the real route handlers on SQLite; the session lab replays the comparison in JavaScript and SQLite.</li>
         <li>No performance number on this page; none can be checked from the repo.</li>
         <li>Rent rules and regulation names are shown as the seed data encodes them, without legal verification.</li>
         <li>Seed properties, units and people are fictional. Demo passwords and SIN-format strings are kept out of the page bundle.</li>
@@ -409,35 +410,31 @@ function Architecture() {
       <path d={`M${x2 - 9} ${y - 5} L${x2} ${y} L${x2 - 9} ${y + 5}z`} fill={bad ? 'var(--bad)' : 'var(--primary)'} />
       <text x={(x1 + x2) / 2} y={y - 8} textAnchor="middle">{label}</text></g>
   );
-  const Cross = ({ x, y }) => <g stroke="var(--bad)" strokeWidth="3" strokeLinecap="round"><line x1={x - 8} y1={y - 8} x2={x + 8} y2={y + 8} /><line x1={x - 8} y1={y + 8} x2={x + 8} y2={y - 8} /></g>;
   return (
     <section id="arch" className="card window reveal" data-title="ARCHITECTURE.md — two auth paths">
       <p className="eyebrow">Architecture, drawn from source</p>
-      <h2>Two auth paths that never meet.</h2>
+      <h2>Two auth paths, now one session.</h2>
       <p className="sub">
-        The login path works: the browser keeps the session in localStorage and sends it as headers. The occupant path expects cookies, a different column and a different database file.
-        Red marks the breaks the Access trace found.
+        The browser keeps the session in localStorage and sends it as headers. The occupant path used to expect cookies, a different column and a different database file;
+        it now reads the same headers from the same sessions table.
       </p>
       <div className="scroll-x" style={{ overflowX: 'auto', marginTop: 16 }}>
-      <svg className="chart wide" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Diagram: login session path versus occupant API path, with the broken links marked">
+      <svg className="chart wide" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Diagram: login session path and occupant API path, both reading the same sessions table">
         <text x={0} y={18} style={{ fontWeight: 700, fill: 'var(--good)' }}>Path 1 · login and session restore (works)</text>
         <Box x={0} y={34} w={200} t="Browser" s="localStorage" />
         <Arrow x1={200} x2={340} y={62} label="x-session-id header" />
         <Box x={340} y={34} w={240} t="/api/auth/session" s="GET route.ts" />
         <Arrow x1={580} x2={720} y={62} label={`WHERE ${A.sessionsPk} = ?`} />
         <Box x={720} y={34} w={240} t="sessions table" s={A.dbPathMain} />
-        <text x={0} y={152} style={{ fontWeight: 700, fill: 'var(--bad)' }}>Path 2 · occupant API (breaks)</text>
-        <Box x={0} y={168} w={200} t="Leaseholder page" s={`fetch() × ${A.leaseFetches}, no header`} bad />
-        <Arrow x1={200} x2={340} y={196} label="no credentials" bad />
-        <Cross x={270} y={214} />
+        <text x={0} y={152} style={{ fontWeight: 700, fill: 'var(--good)' }}>Path 2 · occupant API (works)</text>
+        <Box x={0} y={168} w={200} t="Leaseholder page" s={`fetch() × ${A.leaseFetches}, sessionHeaders()`} />
+        <Arrow x1={200} x2={340} y={196} label="x-session-id header" />
         <Box x={340} y={168} w={240} t="/api/occupants" s="withSession → validateSession" />
-        <Arrow x1={580} x2={720} y={196} label="cookies: never set" bad />
-        <Cross x={650} y={214} />
-        <Box x={720} y={168} w={240} t="sessions?" s={`${A.dbPathAuth} · WHERE id = ?`} bad />
-        <line x1={840} x2={840} y1={90} y2={168} stroke="var(--bad)" strokeWidth="2" strokeDasharray="6 5" />
-        <Cross x={840} y={129} />
-        <text x={828} y={133} textAnchor="end">different file, no id column</text>
-        <text x={0} y={H - 30}>Also on path 1: expires_at is compared as text, so sessions outlive {S.minutes} minutes (Session lab).</text>
+        <Arrow x1={580} x2={720} y={196} label={`WHERE ${A.sessionsPk} = ?`} />
+        <Box x={720} y={168} w={240} t="sessions table" s={A.dbPathMain} />
+        <line x1={840} x2={840} y1={90} y2={168} stroke="var(--primary)" strokeWidth="2" />
+        <text x={828} y={133} textAnchor="end">same table, same file</text>
+        <text x={0} y={H - 30}>Path 1 checks {S.whereClause}, so sessions end after {S.minutes} minutes (Session lab).</text>
         <text x={0} y={H - 10}>withRateLimit: {A.rateLimitTodo ? 'TODO placeholder, no limiting' : 'implemented'}.</text>
       </svg>
       </div>
@@ -464,7 +461,7 @@ function Run() {
       <div className="chips" style={{ marginTop: 14 }}>{stack.map(([k, v]) => <span key={k} className="chip">{k} <b>{v}</b></span>)}</div>
       <ol className="steps" style={{ marginTop: 18 }}>
         <li><span className="n">1</span><div><b>Install and start</b><div className="hint"><code>git clone {REPO}.git && cd dingdong-bms/web && npm install && npm run dev</code></div></div></li>
-        <li><span className="n">2</span><div><b>Smoke tests (no install needed, Node 22.13+)</b><div className="hint"><code>cd web && npm test</code></div></div></li>
+        <li><span className="n">2</span><div><b>Smoke and API tests (no install needed, Node 22.15+)</b><div className="hint"><code>cd web && npm test</code></div></div></li>
         <li><span className="n">3</span><div><b>Rebuild this page and its checks</b><div className="hint"><code>cd site && npm ci && npm run build</code></div></div></li>
       </ol>
       <div className="docs" style={{ marginTop: 20 }}>

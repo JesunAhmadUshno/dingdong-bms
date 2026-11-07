@@ -235,9 +235,10 @@ DELETE /api/occupants?occupant_id=1     Delete occupant
 ## 🧪 Testing
 
 ### Smoke tests
-`cd web && npm test` runs dependency-free checks (Node 22.13+): seed-data
-consistency and the session-expiry comparison in SQLite. CI runs them on
-every push to master.
+`cd web && npm test` runs dependency-free checks (Node 22.15+): seed-data
+consistency, and the real API route handlers on SQLite (login, session expiry,
+occupant list/add/remove and update validation). CI runs them on every push
+to master.
 
 ### Manual Testing Checklist
 - [ ] Login with alice_lease / leasepass456

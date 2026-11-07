@@ -3,9 +3,9 @@
 // SQLite's datetime('now') text format: 'YYYY-MM-DD HH:MM:SS' (UTC).
 export const sqliteNow = (ms) => new Date(ms).toISOString().replace('T', ' ').slice(0, 19);
 
-// Reproduces web/app/api/auth/session/route.ts:
+// Reproduces web/app/api/auth/session/route.ts as it shipped before the fix:
 //   POST stores  expires_at = new Date(Date.now() + 15*60*1000).toISOString()
-//   GET  accepts WHERE expires_at > datetime('now')   (SQLite compares the two as TEXT)
+//   GET  accepted WHERE expires_at > datetime('now')   (SQLite compared the two as TEXT)
 export function sessionCheck(loginMs, minutesSince, sessionMinutes) {
   const expiresAt = new Date(loginMs + sessionMinutes * 60 * 1000).toISOString();
   const nowMs = loginMs + minutesSince * 60 * 1000;
@@ -19,7 +19,7 @@ export function sessionCheck(loginMs, minutesSince, sessionMinutes) {
   return { expiresAt, now, accepted, intended, actualMinutes: (actualEndMs - loginMs) / 60000 };
 }
 
-// Same comparison with the proposed fix: store expires_at in SQLite's own format.
+// Same comparison as the fixed GET route: datetime(expires_at) > datetime('now') compares both in SQLite's own format.
 export const fixedAccepted = (loginMs, minutesSince, sessionMinutes) =>
   sqliteNow(loginMs + sessionMinutes * 60000) > sqliteNow(loginMs + minutesSince * 60000);
 
