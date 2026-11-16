@@ -85,7 +85,7 @@ const Pill = ({ s, children }) => <span className={`pill ${s}`}>{children}</span
 export default function App() {
   useReveal();
   return (
-    <div className="wrap">
+    <div className="wrap"><a className="skip" href="#top">Skip to content</a>
       <MenuBar />
       <div className="glow" aria-hidden="true" />
       <Hero />
@@ -99,7 +99,7 @@ export default function App() {
       <Dock />
       <footer>
         DingDong BMS, MIT licence, branding credit TriMatrixLab. Every number on this page is read from <code>web/</code> and the repo's markdown at build time by <code>site/src/facts.check.mjs</code>; the explorers run in your browser. Seed data, not real buildings or people.
-      </footer>
+      <nav className="support" aria-label="Support this work"><a href="https://github.com/sponsors/JesunAhmadUshno">Sponsor this work</a><a href="https://github.com/sponsors/JesunAhmadUshno">Donate</a><a href="https://buymeacoffee.com/jesun">Buy Me a Coffee</a><a href="https://calendly.com/jesunahmadushno/30min">Work with me</a></nav></footer>
     </div>
   );
 }
@@ -115,7 +115,7 @@ function Hero() {
     [fmt(I.tsLines), `lines of TypeScript in ${I.tsFiles} files`, null],
   ];
   return (
-    <header className="card hero window" id="top" data-title="dingdong-bms — README.md">
+    <header className="card hero window" id="top" data-title="dingdong-bms - README.md">
       <div className="head">
         <p className="eyebrow">Source audit · Next.js {F.deps.dependencies.next} prototype</p>
         <Pill s="good">● Session and occupant bugs fixed</Pill>
@@ -154,7 +154,7 @@ function Roles() {
   const max = Math.max(...F.roles.map((r) => r.permissions.length));
   const Chips = ({ list, s }) => list.length ? <div className="chips">{list.map((p) => <span key={p} className={`chip ${s}`}>{p}</span>)}</div> : <p className="hint">none</p>;
   return (
-    <section id="roles" className="card window reveal" data-title="lib/database.ts — ROLES">
+    <section id="roles" className="card window reveal" data-title="lib/database.ts - ROLES">
       <p className="eyebrow">Role permission explorer</p>
       <h2>{F.roles.length} roles, {A.permCount} distinct permission strings, {CATS.length} categories.</h2>
       <p className="sub">
@@ -206,7 +206,7 @@ function Session() {
   const x = (m) => pad.l + (Math.min(max, m) / max) * (W - pad.l - pad.r);
   const loginTime = new Date(login).toISOString().slice(11, 16);
   return (
-    <section id="session" className="card window reveal" data-title="api/auth/session/route.ts — before and after the fix">
+    <section id="session" className="card window reveal" data-title="api/auth/session/route.ts - before and after the fix">
       <div className="head">
         <div>
           <p className="eyebrow">Session lab · reproduction of repo logic</p>
@@ -272,7 +272,7 @@ function Access() {
     ['warn', 'Authorization', `${role.role_name} ${canOcc ? 'holds' : 'does not hold'} an occupant permission, but the occupant route checks ${A.occPermChecks} of ${A.permCount} permission strings: any valid session could edit any occupant.`],
   ];
   return (
-    <section id="access" className="card window reveal" data-title="lib/api-auth.ts — traced from source">
+    <section id="access" className="card window reveal" data-title="lib/api-auth.ts - traced from source">
       <div className="head">
         <div>
           <p className="eyebrow">Access-path tracer · traced from source, covered by tests</p>
@@ -309,7 +309,7 @@ function Rent() {
   const gti = gtiRent(income, F.rent.gtiPct);
   const seedOk = gtiRent(F.rent.gtiSeed.income, F.rent.gtiPct) === F.rent.gtiSeed.rent;
   return (
-    <section id="rent" className="card window reveal" data-title="lib/database.ts — PROPERTIES · UNITS · seed data">
+    <section id="rent" className="card window reveal" data-title="lib/database.ts - PROPERTIES · UNITS · seed data">
       <div className="head">
         <div>
           <p className="eyebrow">Portfolio and rent rules · seed data, not real buildings</p>
@@ -372,7 +372,7 @@ function Claims() {
   const tone = (s) => (s === 'pass' ? 'good' : s === 'unmeasured' || s === 'partial' ? 'warn' : 'bad');
   const count = (k) => rows.filter((r) => tone(r[2]) === k).length;
   return (
-    <section id="claims" className="card window reveal" data-title="CODE_REVIEW.md — claims vs source">
+    <section id="claims" className="card window reveal" data-title="CODE_REVIEW.md - claims vs source">
       <div className="head">
         <div>
           <p className="eyebrow">Claims vs source · computed at build time</p>
@@ -411,7 +411,7 @@ function Architecture() {
       <text x={(x1 + x2) / 2} y={y - 8} textAnchor="middle">{label}</text></g>
   );
   return (
-    <section id="arch" className="card window reveal" data-title="ARCHITECTURE.md — two auth paths">
+    <section id="arch" className="card window reveal" data-title="ARCHITECTURE.md - two auth paths">
       <p className="eyebrow">Architecture, drawn from source</p>
       <h2>Two auth paths, now one session.</h2>
       <p className="sub">
@@ -454,7 +454,7 @@ function Run() {
     ['USER_AND_PROPERTY_SCHEMA.md', 'Schema', 'Roles, tenure types, properties'],
   ];
   return (
-    <section id="run" className="card window reveal" data-title="Terminal — npm run dev">
+    <section id="run" className="card window reveal" data-title="Terminal - npm run dev">
       <p className="eyebrow">Stack and run locally</p>
       <h2>Runs on your machine, not on this page.</h2>
       <p className="sub">Versions from <code>web/package.json</code>. The app needs a Node server and a native SQLite module, so no live app is embedded here.</p>
